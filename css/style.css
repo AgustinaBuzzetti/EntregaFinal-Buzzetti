@@ -33,6 +33,7 @@ header {
     position: fixed;
     width: 100%;
     background-color: rgb(190, 132, 161);
+    z-index: 9999;
 }
 
 .carrito {
@@ -88,6 +89,10 @@ header {
     cursor: pointer;
 }
 
+.info button:hover {
+    background-color: #9e5b7a;
+}
+
 footer {
     height: 70px;
     background-color: rgb(190, 132, 161);
@@ -115,13 +120,18 @@ footer {
 }
 
 #cerrar-carrito {
-    background-color: #9e5b7a;
+    background-color: #b4728e;
     color: white;
     border: none;
     border-radius: 50%;
     width: 30px;
     height: 30px;
     cursor: pointer;
+    margin-bottom: 20px;
+}
+
+#cerrar-carrito:hover {
+    background-color: #9e5b7a;
 }
 
 .contenedor-carrito {

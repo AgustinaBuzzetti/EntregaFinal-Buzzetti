@@ -1,4 +1,4 @@
-let productos = [
+const productos = [
     { id: 1, nombre: "Romeo Y Julieta", precio: 4000 },
     { id: 2, nombre: "Cien Años de Soledad", precio: 6000 },
     { id: 3, nombre: "Hamlet", precio: 3000 },
@@ -85,9 +85,30 @@ document.querySelectorAll(".info button").forEach((btn, index) => {
 });
 
 document.getElementById("vaciar-carrito").addEventListener("click", () => {
-    carrito = [];
-    localStorage.setItem("carrito", JSON.stringify(carrito));
-    actualizarCarrito();
+
+    carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+    if (carrito.length === 0) {
+        Swal.fire({
+            title: 'Error',
+            text: 'El carrito ya está vacío!',
+            icon: 'error',
+            timer: 1500,
+            showConfirmButton: false
+        });
+    } else {
+        carrito = [];
+        localStorage.setItem("carrito", JSON.stringify(carrito));
+        actualizarCarrito();
+
+        Swal.fire({
+            title: '¡Listo!',
+            text: 'El carrito se ha vaciado con éxito!',
+            icon: 'success',
+            timer: 1500,
+            showConfirmButton: false
+        });
+    }
 });
 
 document.getElementById("cerrar-carrito").addEventListener("click", () => {
@@ -112,7 +133,7 @@ document.getElementById("comprar-carrito").addEventListener("click", () => {
     } else {
         Swal.fire({
             title: 'El carrito está vacío!',
-            icon: 'warning',
+            icon: 'error',
             timer: 1500
         });
     }
