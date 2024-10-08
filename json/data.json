@@ -1,0 +1,11 @@
+[
+    { "id": 1, "nombre": "Romeo Y Julieta", "precio": 4000 },
+    { "id": 2, "nombre": "Cien Años de Soledad", "precio": 6000 },
+    { "id": 3, "nombre": "Hamlet", "precio": 3000 },
+    { "id": 4, "nombre": "Harry Potter", "precio": 4500 },
+    { "id": 5, "nombre": "Las Mil y Una Noches", "precio": 4200 },
+    { "id": 6, "nombre": "Noticia de un Secuestro", "precio": 3100 },
+    { "id": 7, "nombre": "Odisea", "precio": 7000 },
+    { "id": 8, "nombre": "Pinocho", "precio": 2000 },
+    { "id": 9, "nombre": "Romper el Círculo", "precio": 5999 }
+]

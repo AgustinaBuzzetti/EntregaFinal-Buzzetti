@@ -1,21 +1,56 @@
-const productos = [
-    { id: 1, nombre: "Romeo Y Julieta", precio: 4000 },
-    { id: 2, nombre: "Cien Años de Soledad", precio: 6000 },
-    { id: 3, nombre: "Hamlet", precio: 3000 },
-    { id: 4, nombre: "Harry Potter", precio: 4500 },
-    { id: 5, nombre: "Las Mil y Una Noches", precio: 4200 },
-    { id: 6, nombre: "Noticia de un Secuestro", precio: 3100 },
-    { id: 7, nombre: "Odisea", precio: 7000 },
-    { id: 8, nombre: "Pinocho", precio: 2000 },
-    { id: 9, nombre: "Romper el Círculo", precio: 5999 }
-];
-
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
 let contadorCarrito = document.getElementById("contador-carrito");
 let articulosCarrito = document.getElementById("articulos-carrito");
 let totalCarrito = document.getElementById("total-carrito");
 let mensajeCarritoVacio = document.getElementById("mensaje-carrito-vacio");
+
+const mostrarProductos = (productos) => {
+    const contenedor = document.getElementById("contenedor");
+
+    productos.forEach(producto => {
+        let div = document.createElement("div");
+        div.innerHTML = `
+            <img src="./img/${producto.nombre}.jpg">
+            <div class="info">
+                <p>${producto.nombre}</p>
+                <p class="precio">$${producto.precio}</p>
+                <button>Comprar</button>
+            </div>
+        `;
+        contenedor.append(div);
+
+        div.querySelector("button").addEventListener("click", () => {
+            agregarAlCarrito(producto);
+        });
+    });
+};
+
+const agregarAlCarrito = (producto) => {
+    let productoEnCarrito = carrito.find(item => item.id === producto.id);
+
+    if (productoEnCarrito) {
+        productoEnCarrito.cantidad++;
+    } else {
+        carrito.push({ ...producto, cantidad: 1 });
+    }
+
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    actualizarCarrito();
+
+    Toastify({
+        text: "Producto agregado",
+        duration: 3000,
+        backgroundColor: "#9e5b7a",
+        close: true,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+            color: "white",
+        }
+    }).showToast();
+};
 
 const actualizarCarrito = () => {
     contadorCarrito.textContent = carrito.length;
@@ -54,40 +89,36 @@ const eliminarProductoDelCarrito = (productoId) => {
     actualizarCarrito();
 };
 
-document.querySelectorAll(".info button").forEach((btn, index) => {
-    btn.addEventListener("click", () => {
-        let productoSeleccionado = productos[index];
-        let productoEnCarrito = carrito.find(producto => producto.id === productoSeleccionado.id);
-
-        if (productoEnCarrito) {
-            productoEnCarrito.cantidad++;
-        } else {
-            carrito.push({ ...productoSeleccionado, cantidad: 1 });
-        }
-
-        localStorage.setItem("carrito", JSON.stringify(carrito));
-
-        actualizarCarrito();
-
-        Toastify({
-            text: "Producto agregado",
-            duration: 3000,
-            backgroundColor: "#9e5b7a",
-            close: true,
-            gravity: "top",
-            position: "right",
-            stopOnFocus: true,
-            style: {
-                color: "white",
-            }
-        }).showToast();
+fetch('../json/data.json')
+    .then(respuesta => respuesta.json())
+    .then(data => {
+        mostrarProductos(data);
+    })
+    .catch(() => {
+        console.error("Hubo un error en la carga de productos");
     });
+
+const darkModeToggle = document.getElementById("toggle-darkmode");
+const body = document.body;
+
+if (localStorage.getItem("theme") === "dark") {
+    body.classList.add("darkmode");
+    darkModeToggle.textContent = "☀️";
+}
+
+darkModeToggle.addEventListener("click", () => {
+    body.classList.toggle("darkmode");
+
+    if (body.classList.contains("darkmode")) {
+        localStorage.setItem("theme", "dark");
+        darkModeToggle.textContent = "☀️";
+    } else {
+        localStorage.setItem("theme", "light");
+        darkModeToggle.textContent = "🌙";
+    }
 });
 
 document.getElementById("vaciar-carrito").addEventListener("click", () => {
-
-    carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-
     if (carrito.length === 0) {
         Swal.fire({
             title: 'Error',
